@@ -11,7 +11,8 @@ public class Main {
 
         //t.testVigenereCipher();
 
-        t.testVigenereBreaker();
+        //t.testVigenereBreaker1();
+        t.testVigenereBreakerMain();
 
     }
 }

@@ -1,6 +1,7 @@
 import edu.duke.FileResource;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class Tester {
 
@@ -83,8 +84,10 @@ public class Tester {
 
 
     //
-    public void testVigenereBreaker() {
+    public void testVigenereBreaker1() {
         System.out.println("  Тестируем класс VigenereBreaker - дешифрования сообщений, закодированных шифром Виженера !");
+        System.out.println("  Тестируем тут поиск ключа и вспомогательные методы");
+
         VigenereBreaker vBreak = new VigenereBreaker();
 
         // тест метода sliceString(String message, int whichSlice, int totalSlices)
@@ -105,11 +108,39 @@ public class Tester {
         // который находит ключ методом getKey класса CaesarCracker
         // encrypted - зашифр сообщение, klength - длинна ключа, mostCommon - самая распрастраненная буква языка
         FileResource fr = new FileResource("data/athens_keyflute.txt");
+        //String encryptMessage = "1234512345123451234512345123451234512345";
         String encryptMessage = fr.asString();
         int[] key = vBreak.tryKeyLength(encryptMessage, 5, 'e');
         System.out.println(" Массив найденых ключей шифра Виженера - " + Arrays.toString(key));
         System.out.println(" Слово - ключ  - " + vBreak.wordByKey(key));
 
+        // тест метода который перекачивает из файла в HashSet, одно слово в строке
+        FileResource fRes = new FileResource("dictionaries/English");
+        HashSet<String> dictSet = vBreak.readDictionary(fRes);
+        System.out.println(" Словарь :");
+        System.out.println(dictSet.toString());
+        System.out.println();
 
+        // тест метода который возвращает сколько слов из сообщения есть в словаре
+        FileResource fileResource = new FileResource();
+        String message = fileResource.asString();
+        int countWord = vBreak.countWords(message, dictSet);
+        System.out.println();
+        System.out.println(" в словаре dictSet есть " + countWord + " слов из сообщения");
+        System.out.println();
+
+        System.out.println(" Найдем самую частую букву в словаре - Надо выбрать словарь в папке dictionaries");
+        FileResource fDictionary = new FileResource();
+        HashSet<String> dictionary = vBreak.readDictionary(fDictionary);
+        char mostCommon = vBreak.mostCommonCharin(dictionary);
+        System.out.println(" В словаре " + fDictionary.toString() + " самая частая литера - " + mostCommon);
+    }
+
+
+    public void testVigenereBreakerMain() {
+        System.out.println("  Тестируем класс VigenereBreaker - дешифрования сообщений, закодированных шифром Виженера !");
+        System.out.println("  Найдем ключ и протестируем тут главный метод класса ");
+        VigenereBreaker vBreak = new VigenereBreaker();
+        vBreak.breakVigenere();
     }
 }
